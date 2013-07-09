@@ -1,5 +1,6 @@
 *.swp
 *.gem
+/coverage
 *.rbc
 .bundle
 .config
