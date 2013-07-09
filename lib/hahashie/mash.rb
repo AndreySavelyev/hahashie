@@ -6,6 +6,22 @@ class Hahashie::Mash
   end
 
   def method_missing(method, *args)
+    if "!".eql?(method[-1])
+      @hash[method[0...-1]] ||= Hahashie::Mash.new
+      define_singleton_method "#{method[0...-1]}" do
+        @hash[method[0...-1]]
+      end
+      return self
+    end
+    if "=".eql?(method[-1])
+      define_singleton_method "#{method[0...-1]}=" do |val|
+        @hash[method[0...-1]] = val
+      end
+      define_singleton_method "#{method[0...-1]}" do
+        @hash[method[0...-1]]
+      end
+    end
+
     return nil
   end
 

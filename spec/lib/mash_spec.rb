@@ -32,4 +32,13 @@ describe Hahashie::Mash do
     mash.name = 'ololo'
     mash.name.should eq 'ololo'
   end
+
+  it "check multi-level assigment" do
+    mash = Hahashie::Mash.new
+    mash.xer!.name = "123"
+    p mash.inspect
+    p mash.xer.inspect
+    mash.xer.is_a?(Hahashie::Mash).should be_true
+    mash.xer.name.should eq "123"
+  end
 end
