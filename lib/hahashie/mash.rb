@@ -12,17 +12,13 @@ class Hahashie::Mash
         add_getter_method(m_name)
         return @hash[m_name]
       when '='
-        define_singleton_method "#{m_name}=" do |val|
-          @hash[m_name] = val
-        end
+        add_setter_method(m_name)
         add_getter_method(m_name)
         self.send(method, *args)
       when '_'
         return Hahashie::Mash.new
       when '?'
-        define_singleton_method "#{m_name}?" do
-          false
-        end
+        add_check_method(m_name)
         self.send(method)
       else
         return nil
@@ -33,27 +29,16 @@ class Hahashie::Mash
   def build(hash)
     hash.each_pair do |key, value|
       @hash[key] = value.is_a?(Hash) ? Hahashie::Mash.new(value) : value
-      define_singleton_method "#{key}" do
-        if value.is_a?(Hash)
-          Hahashie::Mash.new(value)
-        else
-          @hash[key]
-        end
-      end
-
-      add_check_method hash, key
-
-      define_singleton_method "#{key}=" do |val|
-        @hash[key] = val
-      end
-
+      add_getter_method(key)
+      add_check_method(key)
+      add_setter_method(key)
       add_access_method key
     end
   end
 
-  def add_check_method(hash, key)
+  def add_check_method(key)
     define_singleton_method "#{key}?" do
-      hash.keys.include?(key)
+      @hash.keys.include?(key)
     end
   end
 
@@ -63,21 +48,27 @@ class Hahashie::Mash
     end
   end
 
+  def add_setter_method(name)
+    define_singleton_method "#{name}=" do |value|
+      @hash[name] = value
+    end
+  end
+
   def add_getter_method(name)
-    define_singleton_method "#{name}" do
-      @hash[name]
+    define_singleton_method name do
+      if @hash[name].is_a?(Hash)
+        Hahashie::Mash.new(@hash[name])
+      else
+        @hash[name]
+      end
     end
   end
 
   def to_s
-    str_arr = ["<"]
-    str_arr <<  "#{self.class.name}"
-
+    str_key_values = ""
     @hash.each_pair do |key,value|
-      str_arr << " #{key}=\"#{value}\""
+      str_key_values << " #{key}=\"#{value}\""
     end
-    str_arr << ">"
-
-    str_arr.join
+    "<#{self.class.name}#{str_key_values}>"
   end
 end
