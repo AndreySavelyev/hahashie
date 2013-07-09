@@ -16,10 +16,14 @@ describe Hahashie::Mash do
     mash.name.should eq "test"
  end
 
- it 'check key existing' do
-  mash = Hahashie::Mash.new({name: "test"})
-  mash.name?.should be_true
-  mash.age?.should be_false
- end
+  it 'check key existing' do
+      mash = Hahashie::Mash.new({name: "test"})
+      mash.name?.should be_true
+      mash.age?.should be_false
+  end
 
+  it "check nested attribute" do
+      mash = Hahashie::Mash.new({name: {one: "1", two: "2"}})
+      mash.name.is_a?(Hahashie::Mash).should be_true
+  end
 end
