@@ -1,5 +1,4 @@
 class Hahashie::Mash
-
   def initialize(hash = nil)
     @hash = {}
     build hash if hash
@@ -10,17 +9,13 @@ class Hahashie::Mash
     case method[-1]
       when '!'
         @hash[m_name] ||= Hahashie::Mash.new
-        define_singleton_method "#{m_name}" do
-          @hash[m_name]
-        end
+        add_getter_method(m_name)
         return @hash[m_name]
       when '='
         define_singleton_method "#{m_name}=" do |val|
           @hash[m_name] = val
         end
-        define_singleton_method "#{m_name}" do
-          @hash[m_name]
-        end
+        add_getter_method(m_name)
         self.send(method, *args)
       when '_'
         return Hahashie::Mash.new
@@ -64,6 +59,12 @@ class Hahashie::Mash
 
   def add_access_method(name)
     define_singleton_method "#{name}_" do
+      @hash[name]
+    end
+  end
+
+  def add_getter_method(name)
+    define_singleton_method "#{name}" do
       @hash[name]
     end
   end
