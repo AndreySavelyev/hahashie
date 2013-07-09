@@ -6,23 +6,33 @@ class Hahashie::Mash
   end
 
   def method_missing(method, *args)
-    if "!".eql?(method[-1])
-      @hash[method[0...-1]] ||= Hahashie::Mash.new
-      define_singleton_method "#{method[0...-1]}" do
-        @hash[method[0...-1]]
-      end
-      return self
-    end
-    if "=".eql?(method[-1])
-      define_singleton_method "#{method[0...-1]}=" do |val|
-        @hash[method[0...-1]] = val
-      end
-      define_singleton_method "#{method[0...-1]}" do
-        @hash[method[0...-1]]
-      end
+    m_name = method[0...-1]
+    case method[-1]
+      when '!'
+        @hash[m_name] ||= Hahashie::Mash.new
+        define_singleton_method "#{m_name}" do
+          @hash[m_name]
+        end
+        return @hash[m_name]
+      when '='
+        define_singleton_method "#{m_name}=" do |val|
+          @hash[m_name] = val
+        end
+        define_singleton_method "#{m_name}" do
+          @hash[m_name]
+        end
+        self.send(method, *args)
+      when '_'
+        return Hahashie::Mash.new
+      when '?'
+        define_singleton_method "#{m_name}?" do
+          false
+        end
+        self.send(method)
+      else
+        return nil
     end
 
-    return nil
   end
 
   def build(hash)
@@ -35,12 +45,26 @@ class Hahashie::Mash
           @hash[key]
         end
       end
-      define_singleton_method "#{key}?" do
-        hash.keys.include?(key)
-      end
+
+      add_check_method hash, key
+
       define_singleton_method "#{key}=" do |val|
         @hash[key] = val
       end
+
+      add_access_method key
+    end
+  end
+
+  def add_check_method(hash, key)
+    define_singleton_method "#{key}?" do
+      hash.keys.include?(key)
+    end
+  end
+
+  def add_access_method(name)
+    define_singleton_method "#{name}_" do
+      @hash[name]
     end
   end
 

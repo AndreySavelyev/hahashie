@@ -41,4 +41,12 @@ describe Hahashie::Mash do
     mash.xer.is_a?(Hahashie::Mash).should be_true
     mash.xer.name.should eq "123"
   end
+
+  it 'check underscore access' do
+    mash = Hahashie::Mash.new({a: 'aa', b: {c: 'cc'}} )
+    mash.a_.should eq 'aa'
+    mash.b_.c?.should be_true
+    mash.b_.should be_true
+    mash.b_.d?.should be_false
+  end
 end
