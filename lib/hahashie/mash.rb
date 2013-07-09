@@ -6,7 +6,6 @@ class Hahashie::Mash
   end
 
   def method_missing(method, *args)
-    p "METHOD MISSING!! #{method} - #{args}"
     return nil
   end
 
