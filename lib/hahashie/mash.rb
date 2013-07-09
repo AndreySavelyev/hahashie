@@ -1,39 +1,43 @@
 class Hahashie::Mash
-  attr_reader :hash
 
   def initialize(hash = nil)
-    @hash = hash
-    define_methods if @hash
+    @hash = {}
+    build hash if hash
   end
 
-  def method_missing(method)
+  def method_missing(method, *args)
+    p "METHOD MISSING!! #{method} - #{args}"
     return nil
   end
 
-  def define_methods
-    @hash.each_pair do |key, value|
+  def build(hash)
+    hash.each_pair do |key, value|
+      @hash[key] = value.is_a?(Hash) ? Hahashie::Mash.new(value) : value
       define_singleton_method "#{key}" do
-          if value.is_a?(Hash)
-              Hahashie::Mash.new(value)
-          else
-              value
-          end
+        if value.is_a?(Hash)
+          Hahashie::Mash.new(value)
+        else
+          @hash[key]
+        end
       end
       define_singleton_method "#{key}?" do
-        @hash.keys.include?(key)
+        hash.keys.include?(key)
+      end
+      define_singleton_method "#{key}=" do |val|
+        @hash[key] = val
       end
     end
   end
 
   def to_s
-      str_arr = ["<"]
-      str_arr <<  "#{self.class.name}"
+    str_arr = ["<"]
+    str_arr <<  "#{self.class.name}"
 
-      @hash.each_pair do |key,value|
-          str_arr << " #{key}=\"#{value}\""
-      end
-      str_arr << ">"
+    @hash.each_pair do |key,value|
+      str_arr << " #{key}=\"#{value}\""
+    end
+    str_arr << ">"
 
-      str_arr.join
+    str_arr.join
   end
 end

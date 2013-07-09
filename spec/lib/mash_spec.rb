@@ -23,7 +23,14 @@ describe Hahashie::Mash do
   end
 
   it "check nested attribute" do
-      mash = Hahashie::Mash.new({name: {one: "1", two: "2"}})
+      mash = Hahashie::Mash.new({name: {one: "1", two: "2", three: {ololo: 'trololo'} }, age: '25'})
       mash.name.is_a?(Hahashie::Mash).should be_true
   end
+
+  it 'check assignment' do
+    mash = Hahashie::Mash.new({name: "test"})
+    mash.name = 'ololo'
+    mash.name.should eq 'ololo'
+  end
+
 end
