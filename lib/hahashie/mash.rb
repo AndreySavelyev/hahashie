@@ -7,21 +7,21 @@ class Hahashie::Mash
   def method_missing(method, *args)
     m_name = method[0...-1]
     case method[-1]
-      when '!'
-        @hash[m_name] ||= Hahashie::Mash.new
-        add_getter_method(m_name)
-        return @hash[m_name]
-      when '='
-        add_setter_method(m_name)
-        add_getter_method(m_name)
-        self.send(method, *args)
-      when '_'
-        return Hahashie::Mash.new
-      when '?'
-        add_check_method(m_name)
-        self.send(method)
-      else
-        return nil
+    when '!'
+      @hash[m_name] ||= Hahashie::Mash.new
+      add_getter_method(m_name)
+      return @hash[m_name]
+    when '='
+      add_setter_method(m_name)
+      add_getter_method(m_name)
+      self.send(method, *args)
+    when '_'
+      return Hahashie::Mash.new
+    when '?'
+      add_check_method(m_name)
+      self.send(method)
+    else
+      return nil
     end
 
   end
