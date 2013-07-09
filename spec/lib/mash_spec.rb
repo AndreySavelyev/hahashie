@@ -15,4 +15,11 @@ describe Hahashie::Mash do
     mash = Hahashie::Mash.new({name: "test"})
     mash.name.should eq "test"
  end
+
+ it 'check key existing' do
+  mash = Hahashie::Mash.new({name: "test"})
+  mash.name?.should be_true
+  mash.age?.should be_false
+ end
+
 end
