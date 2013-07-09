@@ -1,20 +1,14 @@
 class Hahashie::Dash
-  attr_reader :required_options
-  attr_reader :default_options
-  attr_reader :properties
 
   def initialize(hash = nil)
+  end
 
+  def self.property(name, options = {})
+    raise self.properties.inspect
   end
 
   class << self
-    def property(name, options = {})
-      properties << name
-      required_options << name if options[:required]
-
-      if options[:default]
-        default_options[name] = options[:default]
-      end
-    end
+    attr_reader :properties
   end
+
 end
