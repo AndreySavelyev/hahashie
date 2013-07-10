@@ -4,11 +4,7 @@ module Hahashie
 
     def self.property(name, options = {})
       @properties ||= {}
-      @properties[name] ||= {value: nil}
-
-      if options[:default]
-        @properties[name][:default] = options[:default]
-      end
+      @properties[name] ||= {value: nil, default: options[:default], required: options[:required]}
 
       define_method(name) do
         property_name = self.class.properties[name]
@@ -16,7 +12,14 @@ module Hahashie
       end
 
       define_method "#{name}=" do |val|
-        self.class.propertie[name][:value] = val
+        self.class.assert_required_set_key!(name)
+        self.class.properties[name][:value] = val
+      end
+    end
+
+    def self.assert_required_set_key!(key)
+      if self.properties[key][:required]
+        raise ArgumentError, "The property '#{key}' is required for this Dash."
       end
     end
 
