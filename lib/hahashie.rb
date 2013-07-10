@@ -6,4 +6,5 @@ module Hahashie
 
   autoload :Mash
   autoload :Dash
+  autoload :Trash
 end
