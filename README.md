@@ -29,5 +29,5 @@ TODO: Write usage instructions here
 5. Create new Pull Request
 
 <a href="https://codeclimate.com/github/AndreySavelyev/hahashie"><img src="https://codeclimate.com/github/AndreySavelyev/hahashie.png" /></a>
-<a href='https://coveralls.io/r/AndreySavelyev/hahashie'><img src='https://coveralls.io/repos/AndreySavelyev/hahashie/badge.png' alt='Coverage Status' /></a>
+<a href='https://coveralls.io/r/AndreySavelyev/hahashie?branch=develop'><img src='https://coveralls.io/repos/AndreySavelyev/hahashie/badge.png?branch=develop' alt='Coverage Status' /></a>
 [![Build Status](https://travis-ci.org/AndreySavelyev/hahashie.png?branch=develop)](https://travis-ci.org/AndreySavelyev/hahashie)
