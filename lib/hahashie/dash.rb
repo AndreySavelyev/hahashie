@@ -1,38 +1,51 @@
 module Hahashie
-  class Dash
+  class Dash < Hash
+
     def initialize(args = {})
-      @props_obj = self.class.properties
-
-      @props_obj.each_pair do |key, value|
-        @props_obj[key][:value] = args[key]
-        define_singleton_method(key) do
-          if @props_obj[key][:value]
-            @props_obj[key][:value]
-          else
-            @props_obj[key][:default]
-          end
-        end
-
-        define_singleton_method "#{key}=" do |val|
-          self.class.assert_required_set_key!(key)
-          @props_obj[key][:value] = val
-        end
+      args.each do |key, value|
+        self[key] = value
       end
-    end
+       
+      # изврат, лучше разнести по отдельным массивам
+      self.class.props.each do |key, value|
+        self[key] = value[:default] if value[:default] && self[key].nil?
+       end
 
-    def self.assert_required_set_key!(key)
-      if self.properties[key][:required]
-        raise ArgumentError, "The property '#{key}' is required for this Dash."
+      # изврат, лучше разнести по отдельным массивам
+      self.class.props.each do |key, value|
+        raise ArgumentError if self[key].nil? && value[:required]
       end
+
     end
 
-    def self.properties
-      @properties
-    end
 
     def self.property(name, options = {})
-      @properties ||= {}
-      @properties[name] ||= {default: options[:default], required: options[:required]}
+      @props ||= {}
+      @props[name] = options
+
+      if options.key?(:default)
+         @props[name][:default] = options[:default]
+      end
+
+      if options.key?(:required) && options[:required]
+        @props[name][:required] = true
+      end
+
+      define_method(name) do 
+        self[name]
+      end
+
+      define_method("#{name}=") do |value|
+        raise ArgumentError if value.nil? && @required.key?(name)
+        self[name] = value
+      end
+
     end
+
+    class << self
+      attr_reader :props
+    end
+  
+
   end
 end
