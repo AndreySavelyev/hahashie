@@ -30,3 +30,4 @@ TODO: Write usage instructions here
 
 <a href="https://codeclimate.com/github/AndreySavelyev/hahashie"><img src="https://codeclimate.com/github/AndreySavelyev/hahashie.png" /></a>
 <a href='https://coveralls.io/r/AndreySavelyev/hahashie'><img src='https://coveralls.io/repos/AndreySavelyev/hahashie/badge.png' alt='Coverage Status' /></a>
+[![Build Status](https://travis-ci.org/AndreySavelyev/hahashie.png?branch=develop)](https://travis-ci.org/AndreySavelyev/hahashie)
