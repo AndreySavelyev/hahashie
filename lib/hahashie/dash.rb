@@ -1,20 +1,23 @@
 module Hahashie
   class Dash
-    attr_reader :props
+    attr_reader :properties
 
     def self.property(name, options = {})
-      @props ||= {}
-      @props[name] ||= {value: nil}
+      @properties ||= {}
+      @properties[name] ||= {value: nil}
 
-      define_method(name) do 
-        self.class.properties[name][:value]
+      if options[:default]
+        @properties[name][:default] = options[:default]
+      end
+
+      define_method(name) do
+        property_name = self.class.properties[name]
+        property_name[:value] ? property_name[:value] : property_name[:default]
       end
 
       define_method "#{name}=" do |val|
         self.class.propertie[name][:value] = val
       end
-
-      # p "PROPS = #{@props.inspect}"
     end
 
     def []=(key, value)
@@ -26,11 +29,7 @@ module Hahashie
     end
 
     def self.properties
-      @props
-    end
-
-    def properties #TODO скрыть нахрен
-      self.class.properties
+      @properties
     end
 
     def initialize(args = {})
@@ -40,21 +39,5 @@ module Hahashie
         end
       end
     end
-
-
-      # define_method "#{name}=" do |val|
-      #   @props[name][:value] = val
-      # end
-
-      # define_method "[]=" do |name, val|
-      #   @props[name]
-      #   # [:value] = val
-      # end
-
-      # define_method '[]' do |name|
-      #   @props[name]
-      # end
-
-
   end
 end
