@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'coveralls', require: false
-
 # Specify your gem's dependencies in hahashie.gemspec
 gemspec
+
+gem 'coveralls', require: false
