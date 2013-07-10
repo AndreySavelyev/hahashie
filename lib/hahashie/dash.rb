@@ -1,19 +1,22 @@
 module Hahashie
   class Dash
-    attr_reader :properties
+    def initialize(args = {})
+      @props_obj = self.class.properties
 
-    def self.property(name, options = {})
-      @properties ||= {}
-      @properties[name] ||= {value: nil, default: options[:default], required: options[:required]}
+      @props_obj.each_pair do |key, value|
+        @props_obj[key][:value] = args[key]
+        define_singleton_method(key) do
+          if @props_obj[key][:value]
+            @props_obj[key][:value]
+          else
+            @props_obj[key][:default]
+          end
+        end
 
-      define_method(name) do
-        property_name = self.class.properties[name]
-        property_name[:value] ? property_name[:value] : property_name[:default]
-      end
-
-      define_method "#{name}=" do |val|
-        self.class.assert_required_set_key!(name)
-        self.class.properties[name][:value] = val
+        define_singleton_method "#{key}=" do |val|
+          self.class.assert_required_set_key!(key)
+          @props_obj[key][:value] = val
+        end
       end
     end
 
@@ -23,24 +26,13 @@ module Hahashie
       end
     end
 
-    def []=(key, value)
-      self.class.properties[key][:value] = value
-    end
-
-    def [](key)
-      self.class.properties[key]
-    end
-
     def self.properties
       @properties
     end
 
-    def initialize(args = {})
-      if args
-        args.each_pair do |key, value|
-          self[key] = value
-        end
-      end
+    def self.property(name, options = {})
+      @properties ||= {}
+      @properties[name] ||= {default: options[:default], required: options[:required]}
     end
   end
 end

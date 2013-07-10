@@ -12,6 +12,7 @@ describe Hahashie::Dash do
 
   it "should be Dash object" do
     @dash = Person.new(name: 'PName', age: '25')
+    #@dash1 = Person.new
 
     expect(@dash).to be
     expect(@dash.name).to eq('PName')
