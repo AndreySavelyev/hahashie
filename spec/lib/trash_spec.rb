@@ -6,6 +6,7 @@ describe Hahashie::Trash do
       property :original, from: :copy
       property :first_name, from: :firstName
       property :login, transform_with: lambda { |v| v.upcase }
+      property :id, transform_with: lambda { |v| v.to_i }
     end
   end
 
@@ -24,8 +25,9 @@ describe Hahashie::Trash do
   end
 
   it 'check lambdas' do
-    @trash = Person2.new(original: 'ololo', login: 'aaa')
+    @trash = Person2.new(original: 'ololo', login: 'aaa', id: '244')
     expect(@trash.login).to eq('AAA')
+    expect(@trash.id.class).to eq(Fixnum)
   end
 
 end
