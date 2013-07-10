@@ -4,8 +4,8 @@ module Hahashie
     attr_reader :top
 
     def initialize(hash = {}, top = nil)
-      @top = top
       @hash = hash
+      @top = top
     end
 
     def method_missing(method, *args)
@@ -15,9 +15,20 @@ module Hahashie
         @hash[key] = Clash.new({}, self)
         return @hash[key]
       else
-        @hash[method.to_sym] = args.first
+        if @hash[method.to_sym].nil?
+          @hash[method.to_sym] = args.first
+        elsif @hash[method].is_a?(Hash)
+          @hash[method].merge!(args.first)
+        else @hash[method].is_a?(Clash)
+          @hash[method].merge(args.first)
+        end
       end
       return self
+    end
+
+    def merge(hash)
+      @hash.merge!(hash)
+      self
     end
 
     def _end!

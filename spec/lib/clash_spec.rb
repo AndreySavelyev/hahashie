@@ -18,4 +18,17 @@ describe Hahashie::Clash do
     expect(clash[:where][:there][:ghi]).to eq(123)
   end
 
+
+  it 'merge clash hashes' do
+    # Multiple hashes are merged automatically
+    c1 = Hahashie::Clash.new
+    c2 = Hahashie::Clash.new
+    c1.where(:abc => 'def').where(:hgi => 123)
+    c2.where!.abc('def').there!.ghi(123).zz('xx').yy('cc')._end!.order(:created_at)._end!.lala("ppp").where(nnew: 'york')
+
+    # c # => {:where => {:abc => 'def', :hgi => 123}}
+    expect(c1[:where]).to eq({abc: 'def', hgi: 123})
+    expect(c2[:where][:nnew]).to eq('york')
+  end
+
 end
