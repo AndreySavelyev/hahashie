@@ -7,4 +7,5 @@ module Hahashie
   autoload :Mash
   autoload :Dash
   autoload :Trash
+  autoload :Clash
 end
