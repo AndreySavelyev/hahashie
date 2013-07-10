@@ -7,6 +7,7 @@ describe Hahashie::Trash do
       property :first_name, from: :firstName
       property :login, transform_with: lambda { |v| v.upcase }
       property :id, transform_with: lambda { |v| v.to_i }
+      property :even, from: :number, with: lambda { |v| v.even? }
     end
   end
 
@@ -28,6 +29,13 @@ describe Hahashie::Trash do
     @trash = Person2.new(original: 'ololo', login: 'aaa', id: '244')
     expect(@trash.login).to eq('AAA')
     expect(@trash.id.class).to eq(Fixnum)
+  end
+
+  it 'check lambda with alias' do
+   @trash = Person2.new(number: 5)
+   expect(@trash.even).to be_false
+   @trash.number = 6
+   expect(@trash.even).to be_true
   end
 
 end
