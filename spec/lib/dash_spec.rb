@@ -48,7 +48,4 @@ describe Hahashie::Dash do
     @dash.name = new_name
     expect(@dash.name).to eq new_name
   end
-
-
-
 end

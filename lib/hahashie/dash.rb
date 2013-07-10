@@ -1,55 +1,45 @@
 module Hahashie
-  class Dash < Hash
+  class Dash
+    class << self
+      attr_reader :defaults, :required, :props_class
+    end
+    attr_reader :props_obj
 
-    def initialize(args = {})
-      args.each do |key, value|
-        self[key] = value
+    def self.property(name, options = {})
+      @props_class ||= []
+      @defaults ||= {}
+      @required ||= {}
+
+      @props_class << name
+      @defaults[name] = options[:default] if options.key?(:default)
+
+      if options.key?(:required) && options[:required]
+        @required[name] = true
       end
-       
-      # изврат, лучше разнести по отдельным массивам
-      self.class.props.each do |key, value|
-        self[key] = value[:default] if value[:default] && self[key].nil?
-       end
+    end
 
-      # изврат, лучше разнести по отдельным массивам
-      self.class.props.each do |key, value|
-        raise ArgumentError if self[key].nil? && value[:required]
+    def initialize(hash = {})
+      @props_obj = {}
+      self.class.props_class.each do |name|
+        @props_obj[name] = hash[name] ? hash[name] : self.class.defaults[name]
+        define_singleton_method name do
+          @props_obj[name]
+        end
+
+        define_singleton_method("#{name}=") do |value|
+          raise ArgumentError if value.nil? && self.class.required.key?(name)
+          @props_obj[name] = value
+        end
       end
 
+      self.class.props_class.each do |key|
+        raise ArgumentError if self.class.required.key?(key) && !@props_obj[key]
+      end
     end
 
     def [](name)
-      raise NoMethodError unless self.class.props.has_key?(name)
-      super name
+      raise NoMethodError unless @props_obj.has_key?(name)
+      @props_obj[name]
     end
-
-    def self.property(name, options = {})
-      @props ||= {}
-      @props[name] = options
-
-      if options.key?(:default)
-         @props[name][:default] = options[:default]
-      end
-
-      if options.key?(:required) && options[:required]
-        @props[name][:required] = true
-      end
-
-      define_method(name) do 
-        self[name]
-      end
-
-      define_method("#{name}=") do |value|
-        raise ArgumentError if value.nil? && @required.key?(name)
-        self[name] = value
-      end
-
-    end
-
-    class << self
-      attr_reader :props
-    end
-  
-
   end
 end
