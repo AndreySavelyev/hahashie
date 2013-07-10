@@ -19,16 +19,24 @@ module Hahashie
       @props_obj = {}
       self.class.props_class.each do |name|
         @props_obj[name] = hash[name] ? hash[name] : self.class.defaults[name]
-        define_singleton_method name do
-          @props_obj[name]
-        end
 
-        define_singleton_method("#{name}=") do |value|
-          raise ArgumentError if value.nil? && self.class.required.key?(name)
-          @props_obj[name] = value
-        end
+        define_getter name
+        define_setter name
 
         raise ArgumentError if self.class.required.key?(name) && !@props_obj[name]
+      end
+    end
+
+    def define_getter(name)
+      define_singleton_method name do
+        @props_obj[name]
+      end
+    end
+
+    def define_setter(name)
+      define_singleton_method("#{name}=") do |value|
+        raise ArgumentError if value.nil? && self.class.required.key?(name)
+        @props_obj[name] = value
       end
     end
 
