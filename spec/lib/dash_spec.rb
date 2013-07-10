@@ -37,7 +37,9 @@ describe Hahashie::Dash do
 
     expect(@dash).to be
     expect(@dash.name).to eq('PName')
+    expect(@dash[:name]).to eq('PName')
     expect(@dash.occupation).to eq('Men')
+    expect {@dash[:zzz] }.to raise_error(NoMethodError)
   end
 
   it 'check assignment' do

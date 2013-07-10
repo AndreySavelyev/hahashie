@@ -18,6 +18,10 @@ module Hahashie
 
     end
 
+    def [](name)
+      raise NoMethodError unless self.class.props.has_key?(name)
+      super name
+    end
 
     def self.property(name, options = {})
       @props ||= {}
