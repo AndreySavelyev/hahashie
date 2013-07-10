@@ -11,11 +11,8 @@ module Hahashie
       @required ||= {}
 
       @props_class << name
-      @defaults[name] = options[:default] if options.key?(:default)
-
-      if options.key?(:required) && options[:required]
-        @required[name] = true
-      end
+      @defaults[name] = options[:default]
+      @required[name] = true if options[:required]
     end
 
     def initialize(hash = {})
@@ -30,10 +27,8 @@ module Hahashie
           raise ArgumentError if value.nil? && self.class.required.key?(name)
           @props_obj[name] = value
         end
-      end
 
-      self.class.props_class.each do |key|
-        raise ArgumentError if self.class.required.key?(key) && !@props_obj[key]
+        raise ArgumentError if self.class.required.key?(name) && !@props_obj[name]
       end
     end
 
