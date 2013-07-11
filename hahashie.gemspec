@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Hahashie::VERSION
   spec.authors       = ["Andrey Savelyev"]
   spec.email         = ["andrey@undev.ru"]
-  spec.description   = %q{hahashie}
-  spec.summary       = %q{hahashie}
-  spec.homepage      = ""
+  spec.description   = %q{hahashie gem is a clone of hashie gem}
+  spec.summary       = %q{hahahahahahahashie}
+  spec.homepage      = "https://github.com/AndreySavelyev/hahashie"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
