@@ -38,9 +38,5 @@ module Hahashie
     def [](name)
       @hash[name]
     end
-
-    def to_s
-      @hash.to_s
-    end
   end
 end
