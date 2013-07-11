@@ -64,11 +64,11 @@ class Hahashie::Mash
     end
   end
 
-  #def to_s
-    #str_key_values = ""
-    #@hash.each_pair do |key,value|
-      #str_key_values << " #{key}=\"#{value}\""
-    #end
-    #"<#{self.class.name}#{str_key_values}>"
-  #end
+  def to_s
+    str_key_values = ""
+    @hash.each_pair do |key,value|
+      str_key_values << " #{key}=\"#{value}\""
+    end
+    "#<#{self.class.name}#{str_key_values}>"
+  end
 end

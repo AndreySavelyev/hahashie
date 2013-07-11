@@ -49,4 +49,10 @@ describe Hahashie::Mash do
     expect(mash.b_.d?).to be_false
     expect(mash.t_.z?).to be_false
   end
+
+  it 'check to_s' do
+    mash = Hahashie::Mash.new({a: 'aa', b: {c: 'cc'}} )
+    expect(mash.to_s).to eq('#<Hahashie::Mash a="aa" b="#<Hahashie::Mash c="cc">">')
+  end
+
 end
