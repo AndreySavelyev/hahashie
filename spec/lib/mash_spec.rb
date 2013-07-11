@@ -47,5 +47,6 @@ describe Hahashie::Mash do
     expect(mash.b_.c?).to be_true
     expect(mash.b_).to be_true
     expect(mash.b_.d?).to be_false
+    expect(mash.t_.z?).to be_false
   end
 end
